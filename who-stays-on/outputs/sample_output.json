@@ -1,0 +1,308 @@
+{
+  "status": "ok",
+  "roster": [
+    {
+      "slot": 2,
+      "hour": "12:00",
+      "powered": [
+        "pharmacy",
+        "atm_booth",
+        "photocopy",
+        "tea_stall",
+        "beauty_salon",
+        "clothing"
+      ],
+      "dark": [
+        {
+          "id": "tailor_jamal",
+          "reason": "Fuel: adding 4 kW lifts this hour 14->18 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "mobile_shop",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "grocery_fridge",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "electronics",
+          "reason": "Fuel: adding 5 kW lifts this hour 14->19 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "restaurant",
+          "reason": "Fuel: adding 6 kW lifts this hour 14->20 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 6 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "jewellery",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 14,
+      "fuel_litres": 2.0,
+      "fuel_running_litres": 2.0
+    },
+    {
+      "slot": 3,
+      "hour": "13:00",
+      "powered": [
+        "pharmacy",
+        "atm_booth",
+        "mobile_shop",
+        "photocopy",
+        "tea_stall",
+        "restaurant",
+        "jewellery"
+      ],
+      "dark": [
+        {
+          "id": "tailor_jamal",
+          "reason": "Capacity: 20 kW on + 4 kW = 24 kW > 20 kW limit; 4 kW would have to go. Worth 3 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "beauty_salon",
+          "reason": "Capacity: 20 kW on + 4 kW = 24 kW > 20 kW limit; 4 kW would have to go. Worth 3 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "grocery_fridge",
+          "reason": "Capacity: 20 kW on + 3 kW = 23 kW > 20 kW limit; 3 kW would have to go. Worth 3 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "electronics",
+          "reason": "Capacity: 20 kW on + 5 kW = 25 kW > 20 kW limit; 5 kW would have to go. Worth 2 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "clothing",
+          "reason": "Capacity: 20 kW on + 2 kW = 22 kW > 20 kW limit; 2 kW would have to go. Worth 3 here. No swap that frees the room scores higher for the day without breaking a rule."
+        }
+      ],
+      "load_kw": 20,
+      "fuel_litres": 2.8,
+      "fuel_running_litres": 4.8
+    },
+    {
+      "slot": 4,
+      "hour": "14:00",
+      "powered": [
+        "pharmacy",
+        "atm_booth",
+        "tailor_jamal",
+        "photocopy",
+        "tea_stall",
+        "grocery_fridge",
+        "electronics"
+      ],
+      "dark": [
+        {
+          "id": "mobile_shop",
+          "reason": "Capacity: 20 kW on + 3 kW = 23 kW > 20 kW limit; 3 kW would have to go. Worth 2 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "beauty_salon",
+          "reason": "Capacity: 20 kW on + 4 kW = 24 kW > 20 kW limit; 4 kW would have to go. Worth 4 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "restaurant",
+          "reason": "Capacity: 20 kW on + 6 kW = 26 kW > 20 kW limit; 6 kW would have to go. Worth 5 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "jewellery",
+          "reason": "Capacity: 20 kW on + 3 kW = 23 kW > 20 kW limit; 3 kW would have to go. Worth 3 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "clothing",
+          "reason": "Capacity: 20 kW on + 2 kW = 22 kW > 20 kW limit; 2 kW would have to go. Worth 3 here. No swap that frees the room scores higher for the day without breaking a rule."
+        }
+      ],
+      "load_kw": 20,
+      "fuel_litres": 2.8,
+      "fuel_running_litres": 7.6
+    },
+    {
+      "slot": 5,
+      "hour": "15:00",
+      "powered": [
+        "pharmacy",
+        "atm_booth",
+        "photocopy",
+        "tea_stall",
+        "beauty_salon",
+        "clothing"
+      ],
+      "dark": [
+        {
+          "id": "tailor_jamal",
+          "reason": "Fuel: adding 4 kW lifts this hour 14->18 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 4 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "mobile_shop",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "grocery_fridge",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "electronics",
+          "reason": "Fuel: adding 5 kW lifts this hour 14->19 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "restaurant",
+          "reason": "Fuel: adding 6 kW lifts this hour 14->20 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "jewellery",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 14,
+      "fuel_litres": 2.0,
+      "fuel_running_litres": 9.6
+    },
+    {
+      "slot": 7,
+      "hour": "17:00",
+      "powered": [
+        "pharmacy",
+        "atm_booth",
+        "photocopy",
+        "tea_stall",
+        "beauty_salon",
+        "clothing"
+      ],
+      "dark": [
+        {
+          "id": "tailor_jamal",
+          "reason": "Fuel: adding 4 kW lifts this hour 14->18 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 4 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "mobile_shop",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 6 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "grocery_fridge",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "electronics",
+          "reason": "Fuel: adding 5 kW lifts this hour 14->19 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 6 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "restaurant",
+          "reason": "Fuel: adding 6 kW lifts this hour 14->20 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "jewellery",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 14,
+      "fuel_litres": 2.0,
+      "fuel_running_litres": 11.6
+    },
+    {
+      "slot": 8,
+      "hour": "18:00",
+      "powered": [
+        "pharmacy",
+        "atm_booth",
+        "tailor_jamal",
+        "grocery_fridge",
+        "electronics",
+        "jewellery"
+      ],
+      "dark": [
+        {
+          "id": "mobile_shop",
+          "reason": "Capacity: 20 kW on + 3 kW = 23 kW > 20 kW limit; 3 kW would have to go. Worth 8 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "photocopy",
+          "reason": "Capacity: 20 kW on + 2 kW = 22 kW > 20 kW limit; 2 kW would have to go. Worth 1 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "tea_stall",
+          "reason": "Capacity: 20 kW on + 1 kW = 21 kW > 20 kW limit; 1 kW would have to go. Worth 3 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "beauty_salon",
+          "reason": "Capacity: 20 kW on + 4 kW = 24 kW > 20 kW limit; 4 kW would have to go. Worth 3 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "restaurant",
+          "reason": "Capacity: 20 kW on + 6 kW = 26 kW > 20 kW limit; 6 kW would have to go. Worth 7 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "clothing",
+          "reason": "Capacity: 20 kW on + 2 kW = 22 kW > 20 kW limit; 2 kW would have to go. Worth 4 here. No swap that frees the room scores higher for the day without breaking a rule."
+        }
+      ],
+      "load_kw": 20,
+      "fuel_litres": 2.8,
+      "fuel_running_litres": 14.4
+    },
+    {
+      "slot": 9,
+      "hour": "19:00",
+      "powered": [
+        "pharmacy",
+        "atm_booth",
+        "mobile_shop",
+        "restaurant"
+      ],
+      "dark": [
+        {
+          "id": "tailor_jamal",
+          "reason": "Fuel: adding 4 kW lifts this hour 14->18 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "photocopy",
+          "reason": "Fuel: adding 2 kW lifts this hour 14->16 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 1 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "tea_stall",
+          "reason": "Fuel: adding 1 kW lifts this hour 14->15 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "beauty_salon",
+          "reason": "Fuel: adding 4 kW lifts this hour 14->18 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "grocery_fridge",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 4 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "electronics",
+          "reason": "Fuel: adding 5 kW lifts this hour 14->19 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 6 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "jewellery",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "clothing",
+          "reason": "Fuel: adding 2 kW lifts this hour 14->16 kW (2.00 L->2.80 L, +0.80 L); the day would need 17.20 L > 17.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 14,
+      "fuel_litres": 2.0,
+      "fuel_running_litres": 16.4
+    }
+  ],
+  "value_total": 186,
+  "fuel_total_litres": 16.4,
+  "dark_hours": {
+    "pharmacy": 0,
+    "atm_booth": 0,
+    "tailor_jamal": 5,
+    "mobile_shop": 5,
+    "photocopy": 2,
+    "tea_stall": 2,
+    "beauty_salon": 4,
+    "grocery_fridge": 5,
+    "electronics": 5,
+    "restaurant": 5,
+    "jewellery": 5,
+    "clothing": 4
+  }
+}

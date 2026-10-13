@@ -1,0 +1,4 @@
+{
+  "status": "invalid_input",
+  "message": "shops[1].id: duplicate id 'pharmacy'"
+}

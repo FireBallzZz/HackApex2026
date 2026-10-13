@@ -1,0 +1,62 @@
+{
+  "status": "ok",
+  "roster": [
+    {
+      "slot": 2,
+      "hour": "12:00",
+      "powered": [],
+      "dark": [],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    },
+    {
+      "slot": 3,
+      "hour": "13:00",
+      "powered": [],
+      "dark": [],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    },
+    {
+      "slot": 4,
+      "hour": "14:00",
+      "powered": [],
+      "dark": [],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    },
+    {
+      "slot": 7,
+      "hour": "17:00",
+      "powered": [],
+      "dark": [],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    },
+    {
+      "slot": 8,
+      "hour": "18:00",
+      "powered": [],
+      "dark": [],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    },
+    {
+      "slot": 9,
+      "hour": "19:00",
+      "powered": [],
+      "dark": [],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    }
+  ],
+  "value_total": 0,
+  "fuel_total_litres": 0.0,
+  "dark_hours": {}
+}

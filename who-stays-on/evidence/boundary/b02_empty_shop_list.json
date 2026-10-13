@@ -1,0 +1,32 @@
+{
+  "grid_available": [
+    true,
+    true,
+    false,
+    false,
+    false,
+    true,
+    true,
+    false,
+    false,
+    false
+  ],
+  "generator_capacity_kw": 10,
+  "fuel_budget_litres": 8.0,
+  "fuel_table": [
+    {
+      "load_kw": 4,
+      "litres_per_hour": 0.8
+    },
+    {
+      "load_kw": 7,
+      "litres_per_hour": 1.2
+    },
+    {
+      "load_kw": 10,
+      "litres_per_hour": 1.6
+    }
+  ],
+  "max_consecutive_dark": 2,
+  "shops": []
+}

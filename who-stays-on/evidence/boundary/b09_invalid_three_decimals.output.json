@@ -1,0 +1,4 @@
+{
+  "status": "invalid_input",
+  "message": "fuel_budget_litres: more than two decimal places (8.005)"
+}

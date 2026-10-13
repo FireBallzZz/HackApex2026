@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shapla Grid - Who Stays On?</title>
+<style>
+  /* Everything is local: no fonts, scripts or images from the internet. */
+  :root {
+    --bg: #070a08; --panel: #101511; --panel2: #151c17; --line: #222c25; --line2: #2c3830;
+    --ink: #e9f0ea; --muted: #8a978e; --dim: #5d6a61;
+    --green: #8fd16a; --green-d: #5fa043; --green-bg: rgba(143,209,106,.12);
+    --red: #f2685f; --red-bg: rgba(242,104,95,.13);
+    --amber: #f3b74f; --amber-bg: rgba(243,183,79,.13);
+    --grid: #3a463e;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 14px/1.45 Inter, "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; }
+  button, select, textarea, input { font: inherit; color: inherit; }
+  .app { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+
+  /* ---------- sidebar ---------- */
+  aside { background: linear-gradient(180deg, #0c110d, #080b09); border-right: 1px solid var(--line);
+    padding: 22px 14px; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 4px; }
+  .logo { display: flex; align-items: center; gap: 10px; margin: 0 6px 22px; }
+  .logo-img { width: 42px; height: 42px; object-fit: contain; border-radius: 10px; display: none; }
+  .logo-ph { width: 42px; height: 42px; border: 1.5px dashed var(--green-d); border-radius: 10px; flex: none;
+    display: grid; place-items: center; font-size: 9px; font-weight: 800; letter-spacing: .8px; color: var(--green); }
+  .logo-text { font-size: 21px; font-weight: 800; letter-spacing: .3px; }
+  .logo-text span { color: var(--green); }
+  .navlabel { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: .8px; margin: 14px 10px 6px; }
+  .nav { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; color: var(--muted);
+    text-decoration: none; cursor: pointer; border: 1px solid transparent; }
+  .nav:hover { color: var(--ink); background: var(--panel); }
+  .nav.active { color: var(--bg); background: var(--green); font-weight: 600; }
+  .nav svg { width: 16px; height: 16px; flex: none; }
+  .side-foot { margin-top: auto; padding: 12px; border: 1px solid var(--line); border-radius: 12px; font-size: 12px; color: var(--muted); }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--dim); margin-right: 6px; }
+  .dot.on { background: var(--green); box-shadow: 0 0 8px var(--green); }
+
+  /* ---------- main ---------- */
+  main { padding: 22px 26px 40px; min-width: 0; }
+  .topbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .topbar h1 { margin: 0; font-size: 26px; font-weight: 700; margin-right: auto; }
+  .topbar h1 small { display: block; font-size: 13px; font-weight: 400; color: var(--muted); }
+  .btn { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 10px; cursor: pointer;
+    background: var(--panel2); border: 1px solid var(--line2); color: var(--ink); font-size: 13px; }
+  .btn:hover { border-color: var(--green-d); }
+  .btn.primary { background: var(--green); color: #0b120c; border-color: var(--green); font-weight: 700; }
+  .btn:disabled { opacity: .4; cursor: default; }
+  .btn svg { width: 15px; height: 15px; }
+  .pill { padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; }
+  .pill.ok { background: var(--green-bg); color: var(--green); }
+  .pill.infeasible { background: var(--amber-bg); color: var(--amber); }
+  .pill.invalid_input, .pill.error { background: var(--red-bg); color: var(--red); }
+  .pill.idle { background: var(--panel2); color: var(--muted); }
+
+  .card { background: linear-gradient(180deg, var(--panel2), var(--panel)); border: 1px solid var(--line);
+    border-radius: 16px; padding: 16px 18px; min-width: 0; }
+  .card h2 { margin: 0 0 12px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  .card h2 .sub { color: var(--muted); font-weight: 400; font-size: 12px; }
+  .card h2 .right { margin-left: auto; }
+  .muted { color: var(--muted); }
+  section { margin-bottom: 16px; scroll-margin-top: 16px; }
+
+  /* input drawer */
+  #inputCard { display: none; }
+  #inputCard.open { display: block; animation: drop .2s ease-out; }
+  textarea { width: 100%; height: 190px; background: #0a0e0b; border: 1px solid var(--line2); border-radius: 10px;
+    padding: 10px; font: 12px/1.4 ui-monospace, Consolas, monospace; color: #cfe3d2; resize: vertical; }
+  .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+  /* ---------- plan-the-day form ---------- */
+  .planhead { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  .planhead h2 { margin: 0 auto 0 0; }
+  .tabs { display: inline-flex; background: #0a0e0b; border: 1px solid var(--line2); border-radius: 10px; padding: 3px; }
+  .tabs button { background: none; border: 0; padding: 6px 14px; border-radius: 8px; cursor: pointer; color: var(--muted); font-size: 13px; }
+  .tabs button.on { background: var(--green); color: #0b120c; font-weight: 700; }
+  .setupbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding: 10px 12px; border-radius: 12px;
+    background: #0b100c; border: 1px solid var(--line); margin-bottom: 14px; font-size: 13px; }
+  .setupbar .lbl { color: var(--muted); margin-right: 2px; }
+  .setupbar .sep { width: 1px; height: 22px; background: var(--line2); margin: 0 4px; }
+  .fld, select.fld { background: #0a0e0b; border: 1px solid var(--line2); border-radius: 9px; padding: 7px 10px; color: var(--ink); min-width: 0; }
+  .fld:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(143,209,106,.15); }
+  .fld.bad { border-color: var(--red); box-shadow: 0 0 0 3px rgba(242,104,95,.15); }
+  .step { border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 12px; background: #0b100c; }
+  .step-h { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+  .step-n { width: 26px; height: 26px; border-radius: 50%; background: var(--green); color: #0b120c; font-weight: 800;
+    display: grid; place-items: center; font-size: 13px; flex: none; }
+  .step-h b { font-size: 14px; }
+  .step-h .sub { color: var(--muted); font-size: 12px; }
+  .step-h .right { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+  .mini { padding: 5px 10px; font-size: 12px; border-radius: 8px; }
+
+  /* step 1: hour chips */
+  .hours { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; }
+  .hour { border: 1px solid var(--line2); border-radius: 12px; padding: 9px 4px; text-align: center; cursor: pointer;
+    background: #0f1510; user-select: none; transition: background .12s, border-color .12s; }
+  .hour .t { font-weight: 700; font-size: 13px; }
+  .hour .s { font-size: 11px; margin-top: 2px; }
+  .hour.grid .s { color: var(--muted); }
+  .hour.out { background: var(--red-bg); border-color: rgba(242,104,95,.5); }
+  .hour.out .s { color: var(--red); font-weight: 700; }
+  .hour:hover { border-color: var(--green-d); }
+
+  /* step 2: generator */
+  .gen { display: grid; grid-template-columns: repeat(3, minmax(150px, 1fr)) 1.6fr; gap: 12px; align-items: start; }
+  .gen label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+  .gen .fld { width: 100%; }
+  .unitwrap { position: relative; }
+  .unitwrap span { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: var(--dim); font-size: 12px; pointer-events: none; }
+  .stepper { display: flex; }
+  .stepper button { width: 34px; border: 1px solid var(--line2); background: var(--panel2); color: var(--ink); cursor: pointer; font-size: 16px; }
+  .stepper button:first-child { border-radius: 9px 0 0 9px; } .stepper button:last-child { border-radius: 0 9px 9px 0; }
+  .stepper .fld { border-radius: 0; text-align: center; width: 100%; }
+  .fueltab { display: grid; gap: 6px; }
+  .fuelrow { display: grid; grid-template-columns: 1fr 1fr 30px; gap: 6px; align-items: center; }
+  .fuelrow .x, .shopcard .x { border: 0; background: none; color: var(--dim); cursor: pointer; font-size: 16px; }
+  .fuelrow .x:hover, .shopcard .x:hover { color: var(--red); }
+  .hint2 { font-size: 11px; color: var(--dim); margin-top: 5px; }
+
+  /* step 3: shop cards with a draggable busy-ness bar editor */
+  .shopgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
+  .shopcard { border: 1px solid var(--line2); border-radius: 14px; padding: 12px; background: #0f1510; }
+  .shopcard.mand { border-color: rgba(243,183,79,.45); }
+  .shoptop { display: grid; grid-template-columns: 1fr 24px; gap: 8px; align-items: center; }
+  .shoptop .fld { font-weight: 700; }
+  .shopopts { display: grid; grid-template-columns: 92px auto; gap: 10px; align-items: center; margin-top: 8px; }
+  .switch { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .switch input { display: none; }
+  .switch i { width: 34px; height: 19px; border-radius: 99px; background: #26302a; position: relative; transition: background .15s; flex: none; }
+  .switch i::after { content: ""; position: absolute; width: 15px; height: 15px; border-radius: 50%; top: 2px; left: 2px; background: #9aa69e; transition: left .15s, background .15s; }
+  .switch input:checked + i { background: var(--amber); }
+  .switch input:checked + i::after { left: 17px; background: #1a1205; }
+  .switch input:checked ~ span { color: var(--amber); font-weight: 700; }
+  .shopmid { display: flex; gap: 8px; align-items: center; margin: 10px 0 6px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
+  .shopmid select { padding: 4px 8px; font-size: 12px; }
+  .bars { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; height: 74px; cursor: ns-resize; touch-action: none; user-select: none; }
+  .barcol { position: relative; background: #0a0e0b; border-radius: 6px; overflow: hidden; }
+  .barcol .f { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, #a7e483, #4f8d36); border-radius: 6px 6px 0 0; transition: height .08s; }
+  .barcol.outage { box-shadow: inset 0 0 0 1px rgba(242,104,95,.45); }
+  .barcol .n { position: absolute; left: 0; right: 0; top: 3px; text-align: center; font-size: 11px; font-weight: 800; color: var(--ink); text-shadow: 0 1px 2px #000; }
+  .barhrs { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin-top: 3px; font-size: 10px; color: var(--dim); text-align: center; }
+  .barhrs .o { color: var(--red); font-weight: 700; }
+  .exact { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin-top: 6px; }
+  .exact input { width: 100%; padding: 4px 2px; text-align: center; font-size: 12px; }
+  .addshop { border: 1.5px dashed var(--line2); border-radius: 14px; display: grid; place-items: center; min-height: 150px;
+    color: var(--green); cursor: pointer; background: none; font-weight: 700; }
+  .addshop:hover { border-color: var(--green); background: var(--green-bg); }
+  .addshop:disabled { color: var(--dim); cursor: default; background: none; border-color: var(--line2); }
+  .planfoot { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 4px; }
+  .planfoot .fld { flex: 1; min-width: 200px; max-width: 360px; }
+  .errs { margin: 10px 0 0; padding: 10px 14px 10px 30px; border-radius: 12px; background: var(--red-bg); color: #f8b9b4; font-size: 13px; display: none; }
+  .errs.show { display: block; }
+  .toast { position: fixed; right: 22px; bottom: 22px; background: var(--green); color: #0b120c; font-weight: 700; padding: 10px 16px;
+    border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,.5); opacity: 0; transform: translateY(10px); transition: all .2s; pointer-events: none; z-index: 9; }
+  .toast.show { opacity: 1; transform: none; }
+  .toast.bad { background: var(--red); color: #fff; }
+
+  /* history (database) */
+  table.hist { width: 100%; border-collapse: separate; border-spacing: 0 6px; font-size: 13px; }
+  .hist th { text-align: left; color: var(--muted); font-weight: 500; font-size: 12px; padding: 0 10px; }
+  .hist td { background: #0d120e; padding: 9px 10px; }
+  .hist td:first-child { border-radius: 10px 0 0 10px; } .hist td:last-child { border-radius: 0 10px 10px 0; text-align: right; white-space: nowrap; }
+  .hist tr.cur td { box-shadow: inset 0 1px 0 var(--green-d), inset 0 -1px 0 var(--green-d); }
+  .hist .pill { font-size: 10px; padding: 3px 8px; }
+
+  @media (max-width: 1100px) { .gen { grid-template-columns: 1fr 1fr; } .hours { grid-template-columns: repeat(5, 1fr); } }
+
+  /* banners */
+  .banner { border-radius: 14px; padding: 14px 18px; margin-bottom: 16px; border: 1px solid; }
+  .banner b { display: block; margin-bottom: 4px; }
+  .banner.infeasible { background: var(--amber-bg); border-color: rgba(243,183,79,.35); color: #f8d9a0; }
+  .banner.invalid_input, .banner.error { background: var(--red-bg); border-color: rgba(242,104,95,.35); color: #f8b9b4; }
+  .banner ul { margin: 6px 0 0; padding-left: 18px; }
+  .tag { display: inline-block; background: var(--amber); color: #1a1205; font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 6px; }
+
+  /* KPI row */
+  .kpis { display: grid; grid-template-columns: 1.25fr 1fr 1fr 1fr; gap: 14px; }
+  .kpi { display: flex; gap: 16px; align-items: center; }
+  .kpi .icon { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line2); display: grid; place-items: center; flex: none; }
+  .kpi .icon svg { width: 18px; height: 18px; color: var(--green); }
+  .kpi .label { color: var(--muted); font-size: 12px; }
+  .kpi .big { font-size: 28px; font-weight: 800; color: var(--green); line-height: 1.1; }
+  .kpi .big.warn { color: var(--amber); } .kpi .big.bad { color: var(--red); }
+  .kpi .note { font-size: 12px; color: var(--muted); }
+  .kpi.click { cursor: pointer; position: relative; transition: border-color .15s, transform .15s; }
+  .kpi.click:hover { border-color: var(--green-d); transform: translateY(-1px); }
+  .kpi.click.active { border-color: var(--green); box-shadow: 0 0 0 1px var(--green), 0 8px 24px rgba(143,209,106,.08); }
+  .kpi .chev { position: absolute; top: 10px; right: 12px; font-size: 10px; color: var(--dim); letter-spacing: .4px; }
+  .kpi.active .chev { color: var(--green); }
+
+  /* trend panel opened from a top card */
+  #trend { display: none; margin-top: 14px; }
+  #trend.open { display: block; animation: drop .2s ease-out; }
+  @keyframes drop { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+  #trend svg { width: 100%; height: auto; display: block; }
+  #trend .summary { color: var(--muted); font-size: 13px; margin: -4px 0 8px; }
+  #trend .summary b { color: var(--ink); }
+  .tline { stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: draw .9s ease-out forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .tkey { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .tkey i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: 3px; }
+  .gauge { width: 128px; height: 128px; flex: none; }
+
+
+  /* roster board */
+  .scroll { overflow-x: auto; }
+  table.board { border-collapse: separate; border-spacing: 4px; width: 100%; font-size: 13px; }
+  .board th { color: var(--muted); font-weight: 500; font-size: 12px; padding: 4px 2px; }
+  .board td { text-align: center; padding: 6px 4px; border-radius: 8px; white-space: nowrap; }
+  .board td.name { text-align: left; background: #0d120e; padding-left: 10px; font-weight: 600; }
+  .board td.name small { display: block; color: var(--muted); font-weight: 400; font-size: 11px; }
+  .board td.kw { color: var(--muted); }
+  .star { color: var(--amber); margin-right: 4px; }
+  td.on { background: var(--green-bg); color: var(--green); font-weight: 800; }
+  td.off { background: var(--red-bg); color: var(--red); font-weight: 800; cursor: pointer; }
+  td.off:hover, td.off.sel { box-shadow: inset 0 0 0 2px var(--red); }
+  td.grid { background: repeating-linear-gradient(135deg, #0e130f 0 6px, #111712 6px 12px); color: var(--dim); font-size: 11px; }
+  .v { font-size: 10px; font-weight: 500; opacity: .65; margin-left: 3px; }
+  td.dh { font-weight: 700; }
+  tr.sum td { background: #0b0f0c; font-size: 12px; color: var(--muted); }
+  tr.sum td.lbl { text-align: left; color: var(--ink); font-weight: 600; padding-left: 10px; }
+  tr.sum td.full { color: var(--green); font-weight: 700; }
+  .over { color: var(--red) !important; font-weight: 800; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .reason-box { margin-top: 10px; padding: 12px 14px; border-radius: 12px; background: #0d120e; border: 1px solid var(--line2); }
+  .reason-box b { color: var(--red); }
+
+  /* shop cards */
+  .shops { display: grid; grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)); gap: 12px; }
+  .shop { display: flex; align-items: center; gap: 12px; background: #0d120e; border: 1px solid var(--line); border-radius: 14px;
+    padding: 12px; cursor: pointer; }
+  .shop:hover, .shop.sel { border-color: var(--green-d); }
+  .shop .badge { width: 50px; height: 50px; flex: none; border-radius: 50%; display: grid; place-items: center;
+    border: 3px solid currentColor; background: #0a0e0b; font-weight: 800; font-size: 16px; line-height: 1; text-align: center; }
+  .shop .badge small { display: block; font-size: 8px; font-weight: 600; color: var(--muted); margin-top: 2px; }
+  .shop .t { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .shop .s { font-size: 12px; color: var(--muted); }
+  .shop .st { font-size: 11px; font-weight: 700; }
+
+  /* reasons */
+  ol.reasons { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; max-height: 420px; overflow: auto; }
+  ol.reasons li { display: grid; grid-template-columns: 56px 150px 1fr; gap: 10px; padding: 8px 10px; background: #0d120e; border-radius: 10px; font-size: 13px; }
+  ol.reasons .h { color: var(--muted); font-variant-numeric: tabular-nums; }
+  ol.reasons .id { font-weight: 700; }
+  .kind { display: inline-block; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; padding: 1px 6px; border-radius: 4px; margin-right: 6px; }
+  .kind.Capacity { background: rgba(120,170,255,.15); color: #9cc1ff; }
+  .kind.Fuel { background: var(--amber-bg); color: var(--amber); }
+  .kind.Never { background: var(--red-bg); color: var(--red); }
+  .kind.Worth, .kind.Not { background: var(--panel2); color: var(--muted); }
+
+  .grid2 { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; }
+  .print-only { display: none; }
+
+  @media (max-width: 1100px) { .kpis { grid-template-columns: 1fr 1fr; } .grid2 { grid-template-columns: 1fr; } }
+  @media (max-width: 820px) {
+    .app { grid-template-columns: 1fr; } aside { display: none; } main { padding: 16px; }
+    .kpis { grid-template-columns: 1fr; } ol.reasons li { grid-template-columns: 50px 1fr; } ol.reasons li .r { grid-column: 1 / -1; }
+  }
+
+  /* ---------- print: one A4 page for the generator-room door ---------- */
+  @media print {
+    @page { size: A4 landscape; margin: 9mm; }
+    html, body { background: #fff; color: #000; font-size: 10.5px; }
+    .app { display: block; } aside, .topbar, .no-print, #inputCard, #history, .toast, .banner:not(.keep) { display: none !important; }
+    main { padding: 0; }
+    .print-only { display: block; margin-bottom: 6px; }
+    .print-only h1 { font-size: 16px; margin: 0; }
+    .card { background: #fff; border: 0; padding: 0; }
+    table.board { border-spacing: 0; border-collapse: collapse; }
+    .board th, .board td { border: 1px solid #999; padding: 3px 4px; color: #000; border-radius: 0; }
+    .board td.name { background: #fff; }
+    td.on { background: #dff3d6 !important; color: #145214 !important; }
+    td.off { background: #fbdcda !important; color: #8a1410 !important; box-shadow: none !important; }
+    td.grid { background: #eee !important; color: #555 !important; }
+    tr.sum td { background: #f5f5f5 !important; color: #000 !important; }
+    .v { display: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="logo">
+      <!-- LOGO: put your image in src="" below (a data:image/... string, see README).
+           While src is empty, the dashed "LOGO" box is shown instead. -->
+      <img id="logoImg" class="logo-img" src="" alt="Logo">
+      <div class="logo-ph" id="logoPh">LOGO</div>
+      <div class="logo-text">Shapla <span>Grid</span></div>
+    </div>
+    <div class="navlabel">Today</div>
+    <a class="nav active" data-go="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Overview</a>
+    <a class="nav" data-go="board"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/></svg>Roster board</a>
+    <a class="nav" data-go="shops"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9h16l-1-5H5L4 9Zm0 0v11h16V9M9 20v-6h6v6"/></svg>Shops</a>
+    <a class="nav" data-go="reasons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/></svg>Why dark?</a>
+    <div class="navlabel">Data</div>
+    <a class="nav" id="navInput"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4H5v16h14V4h-3M9 4h6v3H9zM9 12h6M9 16h4"/></svg>Plan the day</a>
+    <a class="nav" data-go="history"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>History</a>
+    <a class="nav" id="navPrint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z"/></svg>Print view</a>
+    <div class="side-foot"><span class="dot" id="apiDot"></span><span id="apiText">Checking API...</span><br>
+      <span class="muted">POST /api/roster</span></div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <h1>Generator Overview<small id="subtitle">Who stays on during today's load shedding</small></h1>
+      <span class="pill idle" id="statusPill">no roster yet</span>
+      <input type="file" id="file" accept=".json,application/json" hidden>
+      <button class="btn" id="upload"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v4h16v-4"/></svg>Upload input</button>
+      <button class="btn primary" id="edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h4L19 9l-4-4L4 16v4Z"/></svg>Plan the day</button>
+      <button class="btn" id="download" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v12m0 0-4-4m4 4 4-4M4 16v4h16v-4"/></svg>Output JSON</button>
+      <button class="btn" id="print" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z"/></svg>Print</button>
+    </div>
+
+    <section class="card" id="inputCard">
+      <div class="planhead">
+        <h2>Plan the day <span class="sub">fill in the form &mdash; we turn it into the JSON the roster API reads</span></h2>
+        <div class="tabs"><button id="tabForm" class="on">Form</button><button id="tabJson">JSON</button></div>
+      </div>
+
+      <div class="setupbar">
+        <span class="lbl">Saved markets</span>
+        <select class="fld" id="setupSel"><option value="">loading...</option></select>
+        <button class="btn mini" id="setupLoad">Load</button>
+        <button class="btn mini" id="setupDel" title="Delete the selected saved market">Delete</button>
+        <span class="sep"></span>
+        <input class="fld" id="setupName" placeholder="Name, e.g. Shapla - weekdays" style="width:220px">
+        <button class="btn mini" id="setupSave">Save this market</button>
+      </div>
+
+      <div id="formView">
+        <div class="step">
+          <div class="step-h"><span class="step-n">1</span><b>Today's power cuts</b>
+            <span class="sub">tap an hour to switch it between grid power and load shedding</span>
+            <span class="right"><button class="btn mini" id="allGrid">All grid</button><button class="btn mini" id="allOut">All outage</button></span></div>
+          <div class="hours" id="hours"></div>
+        </div>
+
+        <div class="step">
+          <div class="step-h"><span class="step-n">2</span><b>Generator and diesel</b><span class="sub">usually the same every day</span></div>
+          <div class="gen">
+            <div><label for="fCap">Generator capacity</label><div class="unitwrap"><input class="fld" id="fCap" type="number" min="1" step="1"><span>kW</span></div></div>
+            <div><label for="fBudget">Diesel available today</label><div class="unitwrap"><input class="fld" id="fBudget" type="number" min="0" step="0.01"><span>litres</span></div></div>
+            <div><label for="fDark">Longest a shop may stay dark</label>
+              <div class="stepper"><button type="button" id="darkMinus">&minus;</button><input class="fld" id="fDark" type="number" min="0" step="1"><button type="button" id="darkPlus">+</button></div>
+              <div class="hint2">hours in a row (normally 2)</div></div>
+            <div><label>Diesel burnt per hour, by load</label>
+              <div class="fueltab" id="fuelRows"></div>
+              <div class="row" style="margin-top:6px"><button class="btn mini" id="addFuel">+ add level</button><span class="hint2" style="margin:0">last level must equal the capacity</span></div></div>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-h"><span class="step-n">3</span><b>Shops</b><span class="sub" id="shopCount"></span>
+            <span class="sub" style="flex-basis:100%;margin-left:36px">Drag the bars to show how much it matters that a shop has power in each hour (0 = not at all, 10 = very). Red-edged hours are outages.</span></div>
+          <div class="shopgrid" id="shopGrid"></div>
+        </div>
+
+        <div class="planfoot">
+          <input class="fld" id="runLabel" placeholder="Label for history, e.g. Thursday 12 Oct">
+          <button class="btn primary" id="solveForm">Make roster</button>
+          <button class="btn" id="loadSample">Reset to sample</button>
+        </div>
+        <ul class="errs" id="formErrs"></ul>
+      </div>
+
+      <div id="jsonView" hidden>
+        <textarea id="input" spellcheck="false"></textarea>
+        <div class="planfoot" style="margin-top:10px"><button class="btn primary" id="solve">Make roster</button>
+          <span class="muted" style="font-size:12px">For other systems and judges: the exact JSON that is sent to POST /api/roster.</span></div>
+      </div>
+    </section>
+
+    <div id="result"></div>
+
+    <section class="card no-print" id="history">
+      <h2>History <span class="sub">every roster is saved in the local database (SQLite) &mdash; open any past day again</span>
+        <span class="right"><button class="btn mini" id="histRefresh">Refresh</button></span></h2>
+      <div class="scroll"><table class="hist"><thead><tr><th>#</th><th>When</th><th>Label</th><th>Status</th><th>Value</th><th>Diesel</th><th>Outage h</th><th>Shops</th><th></th></tr></thead>
+        <tbody id="histBody"><tr><td colspan="9" class="muted">loading...</td></tr></tbody></table></div>
+    </section>
+    <div class="toast" id="toast"></div>
+  </main>
+</div>
+
+<script>
+const SLOTS = 10;
+const hourLabel = h => String(10 + h).padStart(2, "0") + ":00";
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const L = x => Number(x).toFixed(2) + " L";
+let lastOutput = null, lastInput = null;
+
+/* ---------- logo: image if src is set and loads, otherwise the dashed placeholder ---------- */
+(() => {
+  const img = $("logoImg"), ph = $("logoPh");
+  const show = () => { img.style.display = "block"; ph.style.display = "none"; };
+  if (img.getAttribute("src")) { if (img.complete && img.naturalWidth) show(); else img.onload = show; }
+})();
+
+/* ---------- wiring ---------- */
+document.querySelectorAll("[data-go]").forEach(a => a.onclick = () => {
+  document.querySelectorAll(".nav").forEach(n => n.classList.remove("active"));
+  a.classList.add("active");
+  const t = $(a.dataset.go);
+  if (t) t.scrollIntoView({behavior: "smooth"}); else window.scrollTo({top: 0, behavior: "smooth"});
+});
+const openPlan = (open = !$("inputCard").classList.contains("open")) => {
+  $("inputCard").classList.toggle("open", open);
+  if (open) $("inputCard").scrollIntoView({behavior: "smooth", block: "start"});
+};
+$("edit").onclick = () => openPlan();
+$("navInput").onclick = () => openPlan(true);
+$("upload").onclick = () => $("file").click();
+$("navPrint").onclick = () => !$("print").disabled && window.print();
+$("print").onclick = () => window.print();
+$("solve").onclick = () => solve("json");
+$("solveForm").onclick = () => solve("form");
+$("loadSample").onclick = async () => { setModel(await (await fetch("/sample_input.json")).json()); };
+$("file").onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    try { setModel(JSON.parse(rd.result)); solve("form"); }
+    catch (err) { showTab("json"); $("input").value = rd.result; openPlan(true); solve("json"); }
+  };
+  rd.readAsText(f); e.target.value = "";
+};
+$("download").onclick = () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(lastOutput, null, 2)], {type: "application/json"}));
+  a.download = "roster_output.json"; a.click();
+};
+fetch("/api/health").then(r => r.json()).then(h => {
+  $("apiDot").classList.add("on"); $("apiText").textContent = "API online - " + (h.engine === "ilp" ? "exact ILP engine" : "DP engine");
+}).catch(() => { $("apiText").textContent = "API not reachable"; });
+
+/* ---------- call the API (the screen uses the same endpoint as everyone) ---------- */
+async function solve(from) {
+  let text;
+  if (from === "form" || (from === undefined && !$("formView").hidden)) {
+    const errs = checkModel();
+    if (errs.length) { openPlan(true); return; }
+    text = JSON.stringify(modelToInput(), null, 2);
+    $("input").value = text;
+  } else text = $("input").value;
+  $("statusPill").className = "pill idle"; $("statusPill").textContent = "working...";
+  let out, input = null;
+  try { input = JSON.parse(text); } catch (e) {}
+  try {
+    const r = await fetch("/api/roster", {method: "POST", body: text,
+      headers: {"Content-Type": "application/json", "X-Run-Label": encodeURIComponent($("runLabel").value.trim())}});
+    out = await r.json();
+    currentRun = Number(r.headers.get("X-Run-Id")) || null;
+  } catch (e) { out = {status: "error", message: "Could not reach the API: " + e}; }
+  show(input, out);
+  loadHistory();
+}
+
+function show(input, out) {
+  lastOutput = out; lastInput = input;
+  $("download").disabled = false;
+  $("print").disabled = !(out.roster || (out.best_effort && out.best_effort.roster));
+  $("statusPill").className = "pill " + out.status; $("statusPill").textContent = out.status.replace("_", " ");
+  if (out.status === "ok" || out.status === "infeasible") $("inputCard").classList.remove("open");
+  render(input, out);
+}
+
+/* ---------- render ---------- */
+function render(input, out) {
+  const res = $("result");
+  if (out.status === "invalid_input" || out.status === "error" || !input) {
+    $("inputCard").classList.add("open");
+    res.innerHTML = `<div class="banner ${esc(out.status)}"><b>${out.status === "error" ? "Server error" : "Invalid input - nothing was scheduled"}</b>${esc(out.message || "")}</div>`;
+    return;
+  }
+  let o = out, html = "";
+  if (out.status === "infeasible") {
+    html += `<div class="banner infeasible"><b>Infeasible - no roster can satisfy every rule</b>
+      <ul>${(out.conflicts || [out.message]).map(c => `<li>${esc(c)}</li>`).join("")}</ul>
+      ${out.best_effort ? `<div style="margin-top:10px"><span class="tag">${esc(out.best_effort.label)}</span>
+        <div style="margin-top:6px">Below is that best-effort roster. It is <b style="display:inline">not valid</b> - it shows what it would take.</div></div>` : ""}</div>`;
+    if (!out.best_effort) { res.innerHTML = html; return; }
+    o = out.best_effort;
+  }
+  const v = view(input, o);
+  html += `<div class="print-only"><h1>Shapla Shopping Complex - generator roster</h1>
+    Generator ${input.generator_capacity_kw} kW &middot; diesel budget ${L(input.fuel_budget_litres)} &middot;
+    status ${esc(out.status)}${out.status !== "ok" ? " (BEST EFFORT, NOT VALID)" : ""} &middot; value ${o.value_total} &middot; diesel used ${L(o.fuel_total_litres)}</div>`;
+  html += `<section id="overview" class="no-print">${kpis(input, o, v)}
+      <div class="card" id="trend"><h2 id="trendTitle"></h2><div class="summary" id="trendSummary"></div><div id="trendChart"></div></div></section>`;
+  html += `<section class="card" id="board"><h2>Roster board <span class="sub no-print">&#10003; on &middot; &#10007; dark (click for the reason) &middot; small number = value that hour &middot; &#9733; mandatory</span></h2>
+      <div class="scroll">${board(input, o, v)}</div>
+      <div class="reason-box no-print" id="reasonBox">Click any <b>&#10007;</b> to see exactly why that shop is dark.</div></section>`;
+  html += `<div class="no-print">
+      <section class="card" id="shops"><h2>Shops <span class="sub">number = outage hours with power &middot; click a shop to filter the reasons</span></h2><div class="shops">${shopCards(input, o, v)}</div></section>
+      <section class="card" id="reasons"><h2>Why dark? <span class="sub" id="reasonCount"></span><span class="right"><button class="btn" id="clearFilter" style="display:none">Show all</button></span></h2><ol class="reasons" id="reasonList"></ol></section>
+    </div>`;
+  res.innerHTML = html;
+  fillReasons(v.reasons, null);
+
+  res.querySelectorAll(".kpi.click").forEach(c => c.onclick = () => {
+    const open = c.classList.contains("active");
+    res.querySelectorAll(".kpi.click").forEach(x => x.classList.remove("active"));
+    if (open) { $("trend").classList.remove("open"); return; }
+    c.classList.add("active");
+    showTrend(c.dataset.kpi, input, o, v);
+  });
+
+  res.querySelectorAll("td.off").forEach(td => td.onclick = () => {
+    res.querySelectorAll("td.off.sel").forEach(x => x.classList.remove("sel"));
+    td.classList.add("sel");
+    $("reasonBox").innerHTML = `<b>${esc(td.dataset.shop)}</b> at <b>${esc(td.dataset.hour)}</b> is dark &mdash; ${esc(td.dataset.reason)}`;
+  });
+  res.querySelectorAll(".shop").forEach(c => c.onclick = () => {
+    const was = c.classList.contains("sel");
+    res.querySelectorAll(".shop.sel").forEach(x => x.classList.remove("sel"));
+    if (!was) c.classList.add("sel");
+    fillReasons(v.reasons, was ? null : c.dataset.id);
+  });
+  $("clearFilter").onclick = () => { res.querySelectorAll(".shop.sel").forEach(x => x.classList.remove("sel")); fillReasons(v.reasons, null); };
+}
+
+/* derived numbers used by several panels */
+function view(input, o) {
+  const bySlot = {}; (o.roster || []).forEach(e => bySlot[e.slot] = e);
+  const outage = (o.roster || []).length;
+  const reasons = [];
+  (o.roster || []).forEach(e => e.dark.forEach(d => reasons.push({hour: e.hour, id: d.id, reason: d.reason})));
+  const peak = Math.max(0, ...(o.roster || []).map(e => e.load_kw));
+  return {bySlot, outage, reasons, peak};
+}
+
+/* Gauge colour follows how much of the budget is used (= how little is left):
+   green while plenty is left, through yellow and orange as the reserve shrinks, red when over. */
+function dieselColor(t) {
+  if (t > 1 + 1e-9) return "#f2685f";
+  const stops = [[0, [143, 209, 106]], [0.6, [143, 209, 106]], [0.82, [226, 211, 90]], [1, [243, 150, 74]]];
+  for (let i = 1; i < stops.length; i++) {
+    const [t1, c1] = stops[i - 1], [t2, c2] = stops[i];
+    if (t <= t2) {
+      const k = t2 === t1 ? 0 : (t - t1) / (t2 - t1);
+      return "rgb(" + c1.map((c, j) => Math.round(c + (c2[j] - c) * k)).join(",") + ")";
+    }
+  }
+  return "rgb(243,150,74)";
+}
+
+function kpis(input, o, v) {
+  const budget = input.fuel_budget_litres, used = o.fuel_total_litres, cap = input.generator_capacity_kw;
+  const t = budget > 0 ? used / budget : (used > 0 ? 2 : 0);
+  const frac = Math.min(t, 1), over = used > budget + 1e-9;
+  const col = dieselColor(t);
+  const R = 40, C = 2 * Math.PI * R;
+  let ticks = "";
+  for (let i = 0; i <= 20; i++) {          // each tick keeps the colour of its own position on the scale
+    const ang = (135 + i * 13.5) * Math.PI / 180, r1 = 56, r2 = i % 5 === 0 ? 50 : 53;
+    ticks += `<line x1="${64 + r1 * Math.cos(ang)}" y1="${64 + r1 * Math.sin(ang)}" x2="${64 + r2 * Math.cos(ang)}" y2="${64 + r2 * Math.sin(ang)}"
+      stroke="${i / 20 <= frac + 1e-9 ? dieselColor(over ? 2 : i / 20) : "#2a352d"}" stroke-width="${i % 5 === 0 ? 2 : 1}" stroke-linecap="round"/>`;
+  }
+  const glow = col.startsWith("rgb(") ? col.replace("rgb(", "rgba(").replace(")", ",.55)") : "rgba(242,104,95,.55)";
+  const gauge = `<svg class="gauge" viewBox="0 0 128 128" aria-label="Diesel used ${Math.round(t * 100)} percent">
+      ${ticks}
+      <circle cx="64" cy="64" r="${R}" fill="none" stroke="#1d261f" stroke-width="9" stroke-linecap="round"
+        stroke-dasharray="${C * 0.75} ${C}" transform="rotate(135 64 64)"/>
+      <circle cx="64" cy="64" r="${R}" fill="none" stroke="${col}" stroke-width="9" stroke-linecap="round"
+        stroke-dasharray="${C * 0.75 * frac} ${C}" transform="rotate(135 64 64)" style="filter:drop-shadow(0 0 6px ${glow})"/>
+      <circle cx="64" cy="64" r="28" fill="#0d120e" stroke="#26322a"/>
+      <text x="64" y="62" text-anchor="middle" fill="var(--ink)" font-size="15" font-weight="800">${Math.round(t * 100)}%</text>
+      <text x="64" y="76" text-anchor="middle" fill="var(--muted)" font-size="8.5">diesel used</text>
+      <text x="30" y="112" text-anchor="middle" fill="var(--dim)" font-size="8">0 L</text>
+      <text x="98" y="112" text-anchor="middle" fill="var(--dim)" font-size="8">${+Number(budget).toFixed(2)} L</text></svg>`;
+  const darkTotal = Object.values(o.dark_hours || {}).reduce((a, b) => a + b, 0);
+  const chev = `<span class="chev">TREND &#9662;</span>`;
+  return `<div class="kpis">
+    <div class="card kpi click" data-kpi="fuel">${chev}${gauge}<div><div class="label">Diesel used / budget</div>
+      <div class="big" style="color:${col}">${Number(used).toFixed(2)} L</div>
+      <div class="note">of ${L(budget)} &middot; ${over ? "<span class='over'>" + L(used - budget) + " over</span>" : L(budget - used) + " left"}</div></div></div>
+    <div class="card kpi click" data-kpi="value">${chev}<div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7L12 3Z"/></svg></div>
+      <div><div class="label">Total value served</div><div class="big">${o.value_total}</div><div class="note">across ${v.outage} outage hours</div></div></div>
+    <div class="card kpi click" data-kpi="load">${chev}<div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></div>
+      <div><div class="label">Peak load / capacity</div><div class="big ${v.peak > cap ? "bad" : ""}">${v.peak}<span style="font-size:15px;color:var(--muted)"> / ${cap} kW</span></div>
+      <div class="note">${(input.shops || []).filter(s => s.type === "mandatory").length} mandatory shops always on</div></div></div>
+    <div class="card kpi click" data-kpi="dark">${chev}<div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></div>
+      <div><div class="label">Shop-hours dark</div><div class="big warn">${darkTotal}</div>
+      <div class="note">no shop dark &gt; ${input.max_consecutive_dark} h in a row</div></div></div>
+  </div>`;
+}
+
+/* ---------- trend panel for the clicked card ---------- */
+function showTrend(kind, input, o, v) {
+  const shops = input.shops || [], cap = input.generator_capacity_kw, budget = input.fuel_budget_litres;
+  const at = h => v.bySlot[h];
+  const normal = shops.filter(s => s.type === "normal").length;
+  let cfg;
+  if (kind === "fuel") {
+    let run = 0;
+    const series = [...Array(SLOTS).keys()].map(h => (at(h) ? (run = at(h).fuel_running_litres) : run));
+    const col = dieselColor(budget > 0 ? o.fuel_total_litres / budget : 2);
+    cfg = {title: "Diesel used so far", unit: "L", series, color: col, fmt: x => x.toFixed(2),
+      ref: {value: budget, label: `budget ${L(budget)}`, color: "var(--red)"}, max: Math.max(budget, o.fuel_total_litres) * 1.12,
+      summary: `Diesel climbs only in outage hours and flattens on grid hours. Ends at <b>${L(o.fuel_total_litres)}</b> of ${L(budget)}, ` +
+        (o.fuel_total_litres > budget ? `<b style="color:var(--red)">${L(o.fuel_total_litres - budget)} over</b>.` : `<b>${L(budget - o.fuel_total_litres)}</b> left.`),
+      key: [["diesel so far", col], ["budget", "var(--red)"]]};
+  } else if (kind === "value") {
+    const served = [...Array(SLOTS).keys()].map(h => at(h) ? shops.filter(s => at(h).powered.includes(s.id)).reduce((a, s) => a + s.value_per_slot[h], 0) : null);
+    const all = [...Array(SLOTS).keys()].map(h => at(h) ? shops.reduce((a, s) => a + s.value_per_slot[h], 0) : null);
+    const best = served.reduce((b, x, h) => (x !== null && (b < 0 || x > served[b]) ? h : b), -1);
+    cfg = {title: "Value served per hour", unit: "", series: served, color: "var(--green)", fmt: x => String(x),
+      ref: {series: all, label: "if every shop were on", color: "#6c7a70"}, max: Math.max(1, ...all.filter(x => x !== null)) * 1.12,
+      summary: `Total <b>${o.value_total}</b> over ${v.outage} outage hours` + (best >= 0 ? `; best hour <b>${hourLabel(best)}</b> with <b>${served[best]}</b>.` : ".") +
+        ` The grey line is what every shop together would be worth that hour.`,
+      key: [["value served", "var(--green)"], ["every shop on", "#6c7a70"]]};
+  } else if (kind === "load") {
+    const series = [...Array(SLOTS).keys()].map(h => at(h) ? at(h).load_kw : null);
+    const full = series.filter(x => x !== null && x >= cap).length;
+    cfg = {title: "Generator load per hour", unit: "kW", series, color: "var(--green)", fmt: x => String(x),
+      ref: {value: cap, label: `capacity ${cap} kW`, color: "var(--red)"}, max: cap * 1.15,
+      summary: `Never above <b>${cap} kW</b>. ${full} hour${full === 1 ? "" : "s"} at full load; the others sit lower to save diesel for later.`,
+      key: [["load", "var(--green)"], ["capacity", "var(--red)"]]};
+  } else {
+    const series = [...Array(SLOTS).keys()].map(h => at(h) ? at(h).dark.length : null);
+    cfg = {title: "Shops dark per hour", unit: "", series, color: "var(--amber)", fmt: x => String(x),
+      ref: {value: normal, label: `${normal} normal shops`, color: "#6c7a70"}, max: Math.max(normal, 1) * 1.2,
+      summary: `<b>${Object.values(o.dark_hours || {}).reduce((a, b) => a + b, 0)}</b> shop-hours dark in total. Grid hours reset everyone's dark run, and no shop is dark more than <b>${input.max_consecutive_dark} h</b> in a row.`,
+      key: [["shops dark", "var(--amber)"], ["normal shops", "#6c7a70"]]};
+  }
+  $("trendTitle").innerHTML = `${cfg.title} <span class="sub">10:00 - 20:00</span>`;
+  $("trendSummary").innerHTML = cfg.summary;
+  $("trendChart").innerHTML = lineChart(cfg) +
+    `<div class="tkey">${cfg.key.map(([t, c]) => `<span><i style="background:${c}"></i>${t}</span>`).join("")}<span><i style="background:#1a211c;height:10px;vertical-align:-1px"></i>grid hour</span></div>`;
+  $("trend").classList.add("open");
+}
+
+function lineChart(cfg) {
+  const W = 900, H = 230, left = 46, right = 18, top = 18, bottom = 30;
+  const cw = (W - left - right) / SLOTS, ph = H - top - bottom, max = niceMax(cfg.max || 1);
+  const X = h => left + h * cw + cw / 2, Y = val => top + ph - (val / max) * ph;
+  const grad = "tg" + Math.random().toString(36).slice(2, 7);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(cfg.title)}">
+    <defs><linearGradient id="${grad}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${cfg.color}" stop-opacity=".28"/><stop offset="1" stop-color="${cfg.color}" stop-opacity="0"/></linearGradient></defs>`;
+  for (let h = 0; h < SLOTS; h++) {          // grid-hour bands + hour labels
+    if (!v_isOutage(h)) s += `<rect x="${left + h * cw + 2}" y="${top}" width="${cw - 4}" height="${ph}" rx="6" fill="#121813"/>
+      <text x="${X(h)}" y="${top + ph - 8}" text-anchor="middle" fill="#4f5b53" font-size="10">grid</text>`;
+    s += `<text x="${X(h)}" y="${H - 9}" text-anchor="middle" fill="#8a978e" font-size="11">${hourLabel(h)}</text>`;
+  }
+  for (let i = 0; i <= 4; i++) {
+    const val = max * i / 4;
+    s += `<line x1="${left}" x2="${W - right}" y1="${Y(val)}" y2="${Y(val)}" stroke="#1c241e"/>
+      <text x="${left - 8}" y="${Y(val) + 4}" text-anchor="end" fill="#5d6a61" font-size="10">${+val.toFixed(2)}</text>`;
+  }
+  // reference: a flat line (budget / capacity) or a second series
+  if (cfg.ref.value !== undefined) {
+    s += `<line x1="${left}" x2="${W - right}" y1="${Y(cfg.ref.value)}" y2="${Y(cfg.ref.value)}" stroke="${cfg.ref.color}" stroke-dasharray="6 5" opacity=".85"/>
+      <text x="${left + 6}" y="${Y(cfg.ref.value) - 6}" fill="${cfg.ref.color}" font-size="11">${esc(cfg.ref.label)}</text>`;
+  } else {
+    segments(cfg.ref.series).forEach(seg => {
+      s += `<path d="${seg.map((h, i) => (i ? "L" : "M") + X(h) + " " + Y(cfg.ref.series[h])).join(" ")}" fill="none" stroke="${cfg.ref.color}" stroke-width="1.5" stroke-dasharray="4 4"/>`;
+    });
+  }
+  // main series: area + line + points, broken where the series is null (grid hours)
+  segments(cfg.series).forEach(seg => {
+    const d = seg.map((h, i) => (i ? "L" : "M") + X(h) + " " + Y(cfg.series[h])).join(" ");
+    if (seg.length > 1) s += `<path d="${d} L${X(seg[seg.length - 1])} ${top + ph} L${X(seg[0])} ${top + ph} Z" fill="url(#${grad})"/>`;
+    s += `<path class="tline" d="${d}" fill="none" stroke="${cfg.color}" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>`;
+  });
+  for (let h = 0; h < SLOTS; h++) {
+    const val = cfg.series[h];
+    if (val === null || !v_isOutage(h)) continue;
+    s += `<circle cx="${X(h)}" cy="${Y(val)}" r="5" fill="#0b0f0c" stroke="${cfg.color}" stroke-width="2.5"><title>${hourLabel(h)}: ${cfg.fmt(val)} ${cfg.unit}</title></circle>
+      <text x="${X(h)}" y="${Y(val) - 11}" text-anchor="middle" fill="var(--ink)" font-size="11" font-weight="700">${cfg.fmt(val)}</text>`;
+  }
+  return s + `</svg>`;
+}
+function niceMax(m) {                      // round the axis top up so 4 gridlines land on round numbers
+  const step0 = m / 4, mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const step = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].map(k => k * mag).find(x => x >= step0 - 1e-9);
+  return step * 4;
+}
+function segments(series) {
+  const out = []; let cur = [];
+  series.forEach((x, h) => { if (x === null) { if (cur.length) out.push(cur); cur = []; } else cur.push(h); });
+  if (cur.length) out.push(cur);
+  return out;
+}
+function v_isOutage(h) { return lastInput && lastInput.grid_available && lastInput.grid_available[h] === false; }
+
+function board(input, o, v) {
+  const cap = input.generator_capacity_kw, budget = input.fuel_budget_litres;
+  let h = `<table class="board"><thead><tr><th style="text-align:left">Shop</th><th>kW</th>`;
+  for (let s = 0; s < SLOTS; s++) h += `<th>${hourLabel(s)}</th>`;
+  h += `<th>Dark h</th></tr></thead><tbody>`;
+  for (const shop of input.shops) {
+    const mand = shop.type === "mandatory";
+    h += `<tr><td class="name">${mand ? '<span class="star" title="mandatory">&#9733;</span>' : ""}${esc(shop.id)}${mand ? "<small>mandatory - always on</small>" : ""}</td><td class="kw">${shop.kw}</td>`;
+    for (let s = 0; s < SLOTS; s++) {
+      const e = v.bySlot[s];
+      if (!e) { h += `<td class="grid">grid</td>`; continue; }
+      const val = shop.value_per_slot[s];
+      if (e.powered.includes(shop.id)) h += `<td class="on" title="on - worth ${val}">&#10003;<span class="v">${val}</span></td>`;
+      else {
+        const d = e.dark.find(x => x.id === shop.id), r = d ? d.reason : "";
+        h += `<td class="off" title="${esc(r)}" data-shop="${esc(shop.id)}" data-hour="${esc(e.hour)}" data-reason="${esc(r)}">&#10007;<span class="v">${val}</span></td>`;
+      }
+    }
+    const dh = o.dark_hours ? o.dark_hours[shop.id] : 0;
+    h += `<td class="dh" style="color:${dh ? "var(--amber)" : "var(--green)"}">${dh}</td></tr>`;
+  }
+  let load = `<tr class="sum"><td class="lbl" colspan="2">Load / ${cap} kW</td>`;
+  let fuel = `<tr class="sum"><td class="lbl" colspan="2">Diesel this hour</td>`;
+  let run = `<tr class="sum"><td class="lbl" colspan="2">Diesel so far / ${L(budget)}</td>`;
+  for (let s = 0; s < SLOTS; s++) {
+    const e = v.bySlot[s];
+    if (!e) { load += "<td>-</td>"; fuel += "<td>-</td>"; run += "<td>-</td>"; continue; }
+    load += `<td class="${e.load_kw > cap ? "over" : e.load_kw === cap ? "full" : ""}">${e.load_kw} kW</td>`;
+    fuel += `<td>${L(e.fuel_litres)}</td>`;
+    run += `<td class="${e.fuel_running_litres > budget + 1e-9 ? "over" : ""}">${L(e.fuel_running_litres)}</td>`;
+  }
+  return h + load + "<td></td></tr>" + fuel + "<td></td></tr>" + run + "<td></td></tr></tbody></table>";
+}
+
+function shopCards(input, o, v) {
+  return input.shops.map(shop => {
+    const dark = o.dark_hours ? o.dark_hours[shop.id] : 0, on = v.outage - dark;
+    const frac = v.outage ? on / v.outage : 1;
+    const color = shop.type === "mandatory" || frac >= .66 ? "var(--green)" : frac >= .34 ? "var(--amber)" : "var(--red)";
+    const state = shop.type === "mandatory" ? "Mandatory - always on" : dark === 0 ? "Always on" : `${dark} h dark`;
+    return `<div class="shop" data-id="${esc(shop.id)}">
+      <div class="badge" style="color:${color}"><div>${on}<small>of ${v.outage} h</small></div></div>
+      <div style="min-width:0"><div class="t">${shop.type === "mandatory" ? '<span class="star">&#9733;</span>' : ""}${esc(shop.id)}</div>
+        <div class="s">${shop.kw} kW &middot; ${shop.type}</div>
+        <div class="st" style="color:${color}">${state}</div></div></div>`;
+  }).join("");
+}
+
+function fillReasons(reasons, id) {
+  const list = id ? reasons.filter(r => r.id === id) : reasons;
+  $("reasonCount").textContent = `${list.length} dark cell${list.length === 1 ? "" : "s"}${id ? " for " + id : ""}`;
+  $("clearFilter").style.display = id ? "" : "none";
+  $("reasonList").innerHTML = list.length ? list.map(r => {
+    const kind = r.reason.split(/[: ]/)[0];
+    return `<li><span class="h">${esc(r.hour)}</span><span class="id">${esc(r.id)}</span><span class="r"><span class="kind ${esc(kind)}">${esc(kind)}</span>${esc(r.reason.replace(/^[^:]*:\s*/, ""))}</span></li>`;
+  }).join("") : `<li><span class="r muted" style="grid-column:1/-1">No dark cells${id ? " for this shop" : ""}.</span></li>`;
+}
+
+/* =====================================================================
+   PLAN-THE-DAY FORM
+   The form edits a small model; modelToInput() turns it into exactly the
+   input JSON the API expects (same format as an uploaded file).
+   ===================================================================== */
+let model = null, currentRun = null;
+const PATTERNS = {
+  flat:      ["Same all day",        [5, 5, 5, 5, 5, 5, 5, 5, 5, 5]],
+  morning:   ["Busy in the morning", [8, 8, 7, 6, 5, 4, 3, 2, 2, 1]],
+  lunch:     ["Busy at lunch",       [2, 3, 8, 8, 6, 3, 2, 2, 2, 2]],
+  afternoon: ["Busy in the afternoon", [2, 3, 5, 7, 8, 8, 6, 4, 3, 2]],
+  evening:   ["Busy in the evening", [1, 1, 2, 2, 3, 4, 5, 8, 9, 8]],
+  meals:     ["Lunch and dinner",    [2, 3, 7, 8, 5, 3, 3, 6, 8, 9]],
+  vital:     ["Critical all day",    [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]],
+};
+
+function blankShop(n) {
+  return {id: `shop_${n}`, kw: 2, type: "normal", values: PATTERNS.flat[1].slice(), exact: false};
+}
+function setModel(inp) {
+  const num = (x, d) => (typeof x === "number" && isFinite(x) ? x : d);
+  const grid = Array.isArray(inp.grid_available) && inp.grid_available.length === SLOTS
+    ? inp.grid_available.map(g => g !== false) : Array(SLOTS).fill(true);
+  model = {
+    grid,
+    cap: num(inp.generator_capacity_kw, 20),
+    budget: num(inp.fuel_budget_litres, 0),
+    maxDark: num(inp.max_consecutive_dark, 2),
+    fuel: Array.isArray(inp.fuel_table) ? inp.fuel_table.map(r => ({kw: num(r.load_kw, ""), l: num(r.litres_per_hour, "")})) : [],
+    shops: Array.isArray(inp.shops) ? inp.shops.map(s => ({
+      id: String(s.id ?? ""), kw: num(s.kw, 1), type: s.type === "mandatory" ? "mandatory" : "normal",
+      values: Array.isArray(s.value_per_slot) && s.value_per_slot.length === SLOTS ? s.value_per_slot.map(v => num(v, 0)) : Array(SLOTS).fill(0),
+      exact: false})) : [],
+  };
+  renderForm();
+}
+function modelToInput() {
+  return {
+    grid_available: model.grid.slice(),
+    generator_capacity_kw: Number(model.cap),
+    fuel_budget_litres: Number(model.budget),
+    fuel_table: model.fuel.map(r => ({load_kw: Number(r.kw), litres_per_hour: Number(r.l)})),
+    max_consecutive_dark: Number(model.maxDark),
+    shops: model.shops.map(s => ({id: s.id.trim(), kw: Number(s.kw), type: s.type, value_per_slot: s.values.map(Number)})),
+  };
+}
+
+/* friendly checks before anything is sent (the API checks everything again) */
+function checkModel() {
+  const errs = [], bad = [];
+  const whole = (x, min) => x !== "" && Number.isInteger(Number(x)) && Number(x) >= min;
+  const litres = x => x !== "" && Number(x) >= 0 && Math.abs(Number(x) * 100 - Math.round(Number(x) * 100)) < 1e-6;
+  if (!whole(model.cap, 1)) { errs.push("Generator capacity must be a whole number of kW (1 or more)."); bad.push("fCap"); }
+  if (!litres(model.budget)) { errs.push("Diesel available must be 0 or more, with at most 2 decimals."); bad.push("fBudget"); }
+  if (!whole(model.maxDark, 0)) { errs.push("Longest dark run must be a whole number (0 or more)."); bad.push("fDark"); }
+  if (!model.fuel.length) errs.push("Add at least one diesel level.");
+  let prev = 0;
+  model.fuel.forEach((r, i) => {
+    if (!whole(r.kw, 1) || Number(r.kw) <= prev) { errs.push(`Diesel level ${i + 1}: load must be a whole kW, bigger than the level above.`); bad.push(`fuelkw${i}`); }
+    if (!litres(r.l)) { errs.push(`Diesel level ${i + 1}: litres per hour must be 0 or more, at most 2 decimals.`); bad.push(`fuell${i}`); }
+    if (whole(r.kw, 1)) prev = Number(r.kw);
+  });
+  if (model.fuel.length && Number(model.fuel[model.fuel.length - 1].kw) !== Number(model.cap)) {
+    errs.push(`The last diesel level must be at the generator capacity (${model.cap} kW).`); bad.push(`fuelkw${model.fuel.length - 1}`);
+  }
+  const seen = {};
+  model.shops.forEach((s, i) => {
+    const name = s.id.trim();
+    if (!name) { errs.push(`Shop ${i + 1} needs a name.`); bad.push(`sname${i}`); }
+    else if (seen[name]) { errs.push(`Two shops are called "${name}" - names must be different.`); bad.push(`sname${i}`); }
+    seen[name] = 1;
+    if (!whole(s.kw, 1)) { errs.push(`${name || "Shop " + (i + 1)}: power must be a whole number of kW (1 or more).`); bad.push(`skw${i}`); }
+    if (s.values.some(v => !whole(v, 0))) errs.push(`${name || "Shop " + (i + 1)}: hourly values must be whole numbers, 0 or more.`);
+  });
+  if (model.shops.length > 12) errs.push("At most 12 shops.");
+  document.querySelectorAll("#formView .fld.bad").forEach(e => e.classList.remove("bad"));
+  bad.forEach(id => $(id) && $(id).classList.add("bad"));
+  $("formErrs").innerHTML = errs.map(e => `<li>${esc(e)}</li>`).join("");
+  $("formErrs").classList.toggle("show", errs.length > 0);
+  return errs;
+}
+
+function renderForm() {
+  renderHours();
+  $("fCap").value = model.cap; $("fBudget").value = model.budget; $("fDark").value = model.maxDark;
+  renderFuel(); renderShops();
+  $("formErrs").classList.remove("show");
+}
+function renderHours() {
+  $("hours").innerHTML = model.grid.map((g, h) => `<div class="hour ${g ? "grid" : "out"}" data-h="${h}" role="button" tabindex="0"
+      aria-pressed="${!g}"><div class="t">${hourLabel(h)}</div><div class="s">${g ? "grid" : "outage"}</div></div>`).join("");
+  $("hours").querySelectorAll(".hour").forEach(el => {
+    const flip = () => { const h = +el.dataset.h; model.grid[h] = !model.grid[h]; renderHours(); refreshBarOutages(); };
+    el.onclick = flip;
+    el.onkeydown = e => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); flip(); } };
+  });
+}
+function renderFuel() {
+  $("fuelRows").innerHTML = model.fuel.map((r, i) => `<div class="fuelrow">
+      <div class="unitwrap"><input class="fld" id="fuelkw${i}" type="number" min="1" step="1" value="${esc(r.kw)}" placeholder="up to"><span>kW</span></div>
+      <div class="unitwrap"><input class="fld" id="fuell${i}" type="number" min="0" step="0.01" value="${esc(r.l)}"><span>L / h</span></div>
+      <button class="x" data-i="${i}" title="Remove level">&times;</button></div>`).join("");
+  model.fuel.forEach((r, i) => {
+    $("fuelkw" + i).oninput = e => r.kw = e.target.value;
+    $("fuell" + i).oninput = e => r.l = e.target.value;
+  });
+  $("fuelRows").querySelectorAll(".x").forEach(b => b.onclick = () => { model.fuel.splice(+b.dataset.i, 1); renderFuel(); });
+}
+function renderShops() {
+  $("shopCount").textContent = `${model.shops.length} of 12`;
+  $("shopGrid").innerHTML = model.shops.map((s, i) => shopCardHtml(s, i)).join("") +
+    `<button class="addshop" id="addShop" ${model.shops.length >= 12 ? "disabled" : ""}>${model.shops.length >= 12 ? "12 shops is the maximum" : "+ Add a shop"}</button>`;
+  model.shops.forEach((s, i) => wireShop(s, i));
+  $("addShop").onclick = () => { model.shops.push(blankShop(model.shops.length + 1)); renderShops(); const n = $("sname" + (model.shops.length - 1)); n && (n.focus(), n.select()); };
+}
+function shopCardHtml(s, i) {
+  const max = Math.max(10, ...s.values.map(Number).filter(isFinite));
+  return `<div class="shopcard ${s.type === "mandatory" ? "mand" : ""}" id="shop${i}">
+    <div class="shoptop">
+      <input class="fld" id="sname${i}" value="${esc(s.id)}" placeholder="Shop name" aria-label="Shop name">
+      <button class="x" id="sdel${i}" title="Remove shop">&times;</button>
+    </div>
+    <div class="shopopts">
+      <div class="unitwrap"><input class="fld" id="skw${i}" type="number" min="1" step="1" value="${esc(s.kw)}" aria-label="Power in kW" style="width:100%"><span>kW</span></div>
+      <label class="switch" title="A must-stay-on shop is powered in every outage hour"><input type="checkbox" id="smand${i}" ${s.type === "mandatory" ? "checked" : ""}><i></i><span>Must stay on</span></label>
+    </div>
+    <div class="shopmid">How busy:
+      <select class="fld" id="spat${i}"><option value="">Choose a pattern...</option>${Object.entries(PATTERNS).map(([k, [t]]) => `<option value="${k}">${t}</option>`).join("")}</select>
+      <button class="btn mini" id="sexact${i}" title="Type the exact numbers">${s.exact ? "Hide numbers" : "Exact numbers"}</button>
+    </div>
+    <div class="bars" id="bars${i}" aria-label="Value per hour; drag to change">
+      ${s.values.map((v, h) => `<div class="barcol ${model.grid[h] ? "" : "outage"}"><div class="f" style="height:${Math.max(0, Math.min(100, (Number(v) || 0) / max * 100))}%"></div><div class="n">${esc(v)}</div></div>`).join("")}
+    </div>
+    <div class="barhrs">${[...Array(SLOTS).keys()].map(h => `<span class="${model.grid[h] ? "" : "o"}">${10 + h}</span>`).join("")}</div>
+    ${s.exact ? `<div class="exact">${s.values.map((v, h) => `<input class="fld" data-h="${h}" type="number" min="0" step="1" value="${esc(v)}" aria-label="${hourLabel(h)}">`).join("")}</div>` : ""}
+  </div>`;
+}
+function wireShop(s, i) {
+  $("sname" + i).oninput = e => s.id = e.target.value;
+  $("skw" + i).oninput = e => s.kw = e.target.value;
+  $("smand" + i).onchange = e => { s.type = e.target.checked ? "mandatory" : "normal"; $("shop" + i).classList.toggle("mand", e.target.checked); };
+  $("sdel" + i).onclick = () => { model.shops.splice(i, 1); renderShops(); };
+  $("spat" + i).onchange = e => { if (PATTERNS[e.target.value]) { s.values = PATTERNS[e.target.value][1].slice(); redrawShop(i); } };
+  $("sexact" + i).onclick = () => { s.exact = !s.exact; redrawShop(i); };
+  const card = $("shop" + i);
+  card.querySelectorAll(".exact input").forEach(inp => inp.oninput = e => {
+    s.values[+inp.dataset.h] = e.target.value === "" ? "" : Number(e.target.value); updateBars(i);
+  });
+  // drag on the bars: x picks the hour, y picks the value (0..10)
+  const bars = $("bars" + i);
+  let dragging = false;
+  const setFrom = ev => {
+    const r = bars.getBoundingClientRect();
+    const h = Math.min(SLOTS - 1, Math.max(0, Math.floor((ev.clientX - r.left) / r.width * SLOTS)));
+    const v = Math.round(Math.min(1, Math.max(0, 1 - (ev.clientY - r.top) / r.height)) * 10);
+    if (s.values[h] !== v) { s.values[h] = v; updateBars(i); }
+  };
+  bars.onpointerdown = ev => { dragging = true; bars.setPointerCapture(ev.pointerId); setFrom(ev); };
+  bars.onpointermove = ev => dragging && setFrom(ev);
+  bars.onpointerup = bars.onpointercancel = () => dragging = false;
+}
+function redrawShop(i) {
+  const tmp = document.createElement("div");
+  tmp.innerHTML = shopCardHtml(model.shops[i], i);
+  $("shop" + i).replaceWith(tmp.firstElementChild);
+  wireShop(model.shops[i], i);
+}
+function updateBars(i) {
+  const s = model.shops[i], max = Math.max(10, ...s.values.map(Number).filter(isFinite));
+  $("bars" + i).querySelectorAll(".barcol").forEach((c, h) => {
+    c.querySelector(".f").style.height = Math.max(0, Math.min(100, (Number(s.values[h]) || 0) / max * 100)) + "%";
+    c.querySelector(".n").textContent = s.values[h];
+  });
+  const ex = $("shop" + i).querySelectorAll(".exact input");
+  ex.forEach((inp, h) => { if (document.activeElement !== inp) inp.value = s.values[h]; });
+}
+function refreshBarOutages() {
+  document.querySelectorAll(".bars").forEach(b => b.querySelectorAll(".barcol").forEach((c, h) => c.classList.toggle("outage", !model.grid[h])));
+  document.querySelectorAll(".barhrs").forEach(b => b.querySelectorAll("span").forEach((c, h) => c.classList.toggle("o", !model.grid[h])));
+}
+
+$("fCap").oninput = e => model.cap = e.target.value;
+$("fBudget").oninput = e => model.budget = e.target.value;
+$("fDark").oninput = e => model.maxDark = e.target.value;
+$("darkMinus").onclick = () => { model.maxDark = Math.max(0, (Number(model.maxDark) || 0) - 1); $("fDark").value = model.maxDark; };
+$("darkPlus").onclick = () => { model.maxDark = (Number(model.maxDark) || 0) + 1; $("fDark").value = model.maxDark; };
+$("addFuel").onclick = () => { model.fuel.push({kw: "", l: ""}); renderFuel(); $("fuelkw" + (model.fuel.length - 1)).focus(); };
+$("allGrid").onclick = () => { model.grid = Array(SLOTS).fill(true); renderHours(); refreshBarOutages(); };
+$("allOut").onclick = () => { model.grid = Array(SLOTS).fill(false); renderHours(); refreshBarOutages(); };
+
+function showTab(which) {
+  if (which === "json") {
+    if (!$("formView").hidden) $("input").value = JSON.stringify(modelToInput(), null, 2);
+    $("formView").hidden = true; $("jsonView").hidden = false;
+  } else {
+    if (!$("jsonView").hidden) {
+      try { setModel(JSON.parse($("input").value)); }
+      catch (e) { toast("That JSON can't be read - fix it first", true); return; }
+    }
+    $("jsonView").hidden = true; $("formView").hidden = false;
+  }
+  $("tabForm").classList.toggle("on", which !== "json");
+  $("tabJson").classList.toggle("on", which === "json");
+}
+$("tabForm").onclick = () => showTab("form");
+$("tabJson").onclick = () => showTab("json");
+
+function toast(msg, bad) {
+  const t = $("toast"); t.textContent = msg; t.className = "toast show" + (bad ? " bad" : "");
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.className = "toast", 2400);
+}
+
+/* ---------- saved markets (database: setups table) ---------- */
+async function loadSetups(selectId) {
+  try {
+    const list = await (await fetch("/api/setups")).json();
+    $("setupSel").innerHTML = list.length
+      ? list.map(s => `<option value="${s.id}">${esc(s.name)} (${s.shop_count} shops)</option>`).join("")
+      : `<option value="">no saved markets yet</option>`;
+    if (selectId) $("setupSel").value = String(selectId);
+  } catch (e) { $("setupSel").innerHTML = `<option value="">database not reachable</option>`; }
+}
+$("setupLoad").onclick = async () => {
+  const id = $("setupSel").value; if (!id) return;
+  const s = await (await fetch("/api/setups/" + id)).json();
+  setModel(s.input); showTab("form"); $("setupName").value = s.name; toast(`Loaded "${s.name}"`);
+};
+$("setupSave").onclick = async () => {
+  const name = $("setupName").value.trim() || ($("setupSel").selectedOptions[0] || {}).text?.replace(/ \(\d+ shops\)$/, "");
+  if (!name) { toast("Give the market a name first", true); $("setupName").focus(); return; }
+  let input;
+  if (!$("formView").hidden) { if (checkModel().length) { toast("Fix the form first", true); return; } input = modelToInput(); }
+  else { try { input = JSON.parse($("input").value); } catch (e) { toast("That JSON can't be read", true); return; } }
+  const r = await fetch("/api/setups", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({name, input})});
+  const d = await r.json();
+  if (!r.ok) { toast(d.error || "Could not save", true); return; }
+  toast(`Saved "${d.name}"`); loadSetups(d.id);
+};
+$("setupDel").onclick = async () => {
+  const id = $("setupSel").value; if (!id) return;
+  const name = $("setupSel").selectedOptions[0].text;
+  if (!confirm(`Delete saved market ${name}?`)) return;
+  await fetch("/api/setups/" + id, {method: "DELETE"}); toast("Deleted"); loadSetups();
+};
+
+/* ---------- history (database: runs table) ---------- */
+async function loadHistory() {
+  try {
+    const runs = await (await fetch("/api/runs?limit=30")).json();
+    $("histBody").innerHTML = runs.length ? runs.map(r => `<tr class="${r.id === currentRun ? "cur" : ""}">
+        <td class="muted">${r.id}</td><td>${esc(r.created_at)}</td><td>${esc(r.label || "-")}</td>
+        <td><span class="pill ${esc(r.status)}">${esc(String(r.status).replace("_", " "))}</span></td>
+        <td>${r.value_total ?? "-"}</td><td>${r.fuel_total_litres != null ? L(r.fuel_total_litres) : "-"}</td>
+        <td>${r.outage_hours ?? "-"}</td><td>${r.shop_count ?? "-"}</td>
+        <td><button class="btn mini" data-open="${r.id}">Open</button> <button class="btn mini" data-del="${r.id}">Delete</button></td></tr>`).join("")
+      : `<tr><td colspan="9" class="muted">No rosters yet - make one and it will appear here.</td></tr>`;
+    $("histBody").querySelectorAll("[data-open]").forEach(b => b.onclick = () => openRun(+b.dataset.open));
+    $("histBody").querySelectorAll("[data-del]").forEach(b => b.onclick = async () => {
+      if (!confirm(`Delete run #${b.dataset.del} from history?`)) return;
+      await fetch("/api/runs/" + b.dataset.del, {method: "DELETE"}); loadHistory();
+    });
+  } catch (e) { $("histBody").innerHTML = `<tr><td colspan="9" class="muted">Database not reachable.</td></tr>`; }
+}
+async function openRun(id) {
+  const r = await (await fetch("/api/runs/" + id)).json();
+  currentRun = id;
+  if (r.input && typeof r.input === "object") { try { setModel(r.input); } catch (e) {} }
+  $("input").value = JSON.stringify(r.input, null, 2);
+  $("runLabel").value = r.label || "";
+  show(r.input, r.output);
+  loadHistory();
+  window.scrollTo({top: 0, behavior: "smooth"});
+  toast(`Showing saved roster #${id} from ${r.created_at}`);
+}
+$("histRefresh").onclick = loadHistory;
+
+/* start with the sample market already scheduled */
+(async () => {
+  setModel(await (await fetch("/sample_input.json")).json());
+  loadSetups();
+  solve("form");
+})();
+</script>
+</body>
+</html>

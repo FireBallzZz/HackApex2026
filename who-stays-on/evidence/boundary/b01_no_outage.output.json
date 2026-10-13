@@ -1,0 +1,13 @@
+{
+  "status": "ok",
+  "roster": [],
+  "value_total": 0,
+  "fuel_total_litres": 0.0,
+  "dark_hours": {
+    "pharmacy": 0,
+    "tailor": 0,
+    "mobile": 0,
+    "photocopy": 0,
+    "tea_stall": 0
+  }
+}

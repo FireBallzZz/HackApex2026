@@ -1,0 +1,434 @@
+{
+  "status": "ok",
+  "roster": [
+    {
+      "slot": 0,
+      "hour": "10:00",
+      "powered": [
+        "s0",
+        "s1",
+        "s6",
+        "s9"
+      ],
+      "dark": [
+        {
+          "id": "s2",
+          "reason": "Fuel: adding 4 kW lifts this hour 14->18 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s3",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 4 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s4",
+          "reason": "Fuel: adding 1 kW lifts this hour 14->15 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s5",
+          "reason": "Fuel: adding 6 kW lifts this hour 14->20 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 6 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s7",
+          "reason": "Fuel: adding 5 kW lifts this hour 14->19 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 9 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s8",
+          "reason": "Fuel: adding 2 kW lifts this hour 14->16 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 6 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s10",
+          "reason": "Fuel: adding 2 kW lifts this hour 14->16 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 1 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s11",
+          "reason": "Fuel: adding 1 kW lifts this hour 14->15 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 14,
+      "fuel_litres": 2.0,
+      "fuel_running_litres": 2.0
+    },
+    {
+      "slot": 1,
+      "hour": "11:00",
+      "powered": [
+        "s0",
+        "s3",
+        "s4",
+        "s6",
+        "s7",
+        "s8",
+        "s10",
+        "s11"
+      ],
+      "dark": [
+        {
+          "id": "s1",
+          "reason": "Capacity: 20 kW on + 5 kW = 25 kW > 20 kW limit; 5 kW would have to go. Worth 4 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s2",
+          "reason": "Capacity: 20 kW on + 4 kW = 24 kW > 20 kW limit; 4 kW would have to go. Worth 7 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s5",
+          "reason": "Capacity: 20 kW on + 6 kW = 26 kW > 20 kW limit; 6 kW would have to go. Worth 9 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s9",
+          "reason": "Capacity: 20 kW on + 3 kW = 23 kW > 20 kW limit; 3 kW would have to go. Worth 4 here. No swap that frees the room scores higher for the day without breaking a rule."
+        }
+      ],
+      "load_kw": 20,
+      "fuel_litres": 2.8,
+      "fuel_running_litres": 4.8
+    },
+    {
+      "slot": 2,
+      "hour": "12:00",
+      "powered": [
+        "s0",
+        "s2",
+        "s4",
+        "s5",
+        "s6",
+        "s10",
+        "s11"
+      ],
+      "dark": [
+        {
+          "id": "s1",
+          "reason": "Capacity: 20 kW on + 5 kW = 25 kW > 20 kW limit; 5 kW would have to go. Worth 1 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s3",
+          "reason": "Capacity: 20 kW on + 3 kW = 23 kW > 20 kW limit; 3 kW would have to go. Worth 3 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s7",
+          "reason": "Capacity: 20 kW on + 5 kW = 25 kW > 20 kW limit; 5 kW would have to go. Worth 2 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s8",
+          "reason": "Capacity: 20 kW on + 2 kW = 22 kW > 20 kW limit; 2 kW would have to go. Worth 3 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s9",
+          "reason": "Capacity: 20 kW on + 3 kW = 23 kW > 20 kW limit; 3 kW would have to go. Worth 0 here. No swap that frees the room scores higher for the day without breaking a rule."
+        }
+      ],
+      "load_kw": 20,
+      "fuel_litres": 2.8,
+      "fuel_running_litres": 7.6
+    },
+    {
+      "slot": 3,
+      "hour": "13:00",
+      "powered": [
+        "s0",
+        "s1",
+        "s3",
+        "s4",
+        "s6",
+        "s8",
+        "s9"
+      ],
+      "dark": [
+        {
+          "id": "s2",
+          "reason": "Capacity: 20 kW on + 4 kW = 24 kW > 20 kW limit; 4 kW would have to go. Worth 1 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s5",
+          "reason": "Capacity: 20 kW on + 6 kW = 26 kW > 20 kW limit; 6 kW would have to go. Worth 6 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s7",
+          "reason": "Capacity: 20 kW on + 5 kW = 25 kW > 20 kW limit; 5 kW would have to go. Worth 9 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s10",
+          "reason": "Capacity: 20 kW on + 2 kW = 22 kW > 20 kW limit; 2 kW would have to go. Worth 5 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s11",
+          "reason": "Capacity: 20 kW on + 1 kW = 21 kW > 20 kW limit; 1 kW would have to go. Worth 3 here. No swap that frees the room scores higher for the day without breaking a rule."
+        }
+      ],
+      "load_kw": 20,
+      "fuel_litres": 2.8,
+      "fuel_running_litres": 10.4
+    },
+    {
+      "slot": 4,
+      "hour": "14:00",
+      "powered": [
+        "s0",
+        "s4",
+        "s6",
+        "s7",
+        "s10"
+      ],
+      "dark": [
+        {
+          "id": "s1",
+          "reason": "Fuel: adding 5 kW lifts this hour 14->19 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s2",
+          "reason": "Fuel: adding 4 kW lifts this hour 14->18 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 0 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s3",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 6 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s5",
+          "reason": "Fuel: adding 6 kW lifts this hour 14->20 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 0 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s8",
+          "reason": "Fuel: adding 2 kW lifts this hour 14->16 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 1 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s9",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s11",
+          "reason": "Fuel: adding 1 kW lifts this hour 14->15 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 4 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 14,
+      "fuel_litres": 2.0,
+      "fuel_running_litres": 12.4
+    },
+    {
+      "slot": 5,
+      "hour": "15:00",
+      "powered": [
+        "s0",
+        "s2",
+        "s4",
+        "s5",
+        "s6",
+        "s8",
+        "s11"
+      ],
+      "dark": [
+        {
+          "id": "s1",
+          "reason": "Capacity: 20 kW on + 5 kW = 25 kW > 20 kW limit; 5 kW would have to go. Worth 4 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s3",
+          "reason": "Capacity: 20 kW on + 3 kW = 23 kW > 20 kW limit; 3 kW would have to go. Worth 0 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s7",
+          "reason": "Capacity: 20 kW on + 5 kW = 25 kW > 20 kW limit; 5 kW would have to go. Worth 0 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s9",
+          "reason": "Capacity: 20 kW on + 3 kW = 23 kW > 20 kW limit; 3 kW would have to go. Worth 5 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s10",
+          "reason": "Capacity: 20 kW on + 2 kW = 22 kW > 20 kW limit; 2 kW would have to go. Worth 7 here. No swap that frees the room scores higher for the day without breaking a rule."
+        }
+      ],
+      "load_kw": 20,
+      "fuel_litres": 2.8,
+      "fuel_running_litres": 15.2
+    },
+    {
+      "slot": 6,
+      "hour": "16:00",
+      "powered": [
+        "s0",
+        "s1",
+        "s3",
+        "s4",
+        "s9",
+        "s10",
+        "s11"
+      ],
+      "dark": [
+        {
+          "id": "s2",
+          "reason": "Capacity: 20 kW on + 4 kW = 24 kW > 20 kW limit; 4 kW would have to go. Worth 6 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s5",
+          "reason": "Capacity: 20 kW on + 6 kW = 26 kW > 20 kW limit; 6 kW would have to go. Worth 2 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s6",
+          "reason": "Capacity: 20 kW on + 1 kW = 21 kW > 20 kW limit; 1 kW would have to go. Worth 2 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s7",
+          "reason": "Capacity: 20 kW on + 5 kW = 25 kW > 20 kW limit; 5 kW would have to go. Worth 6 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s8",
+          "reason": "Capacity: 20 kW on + 2 kW = 22 kW > 20 kW limit; 2 kW would have to go. Worth 4 here. No swap that frees the room scores higher for the day without breaking a rule."
+        }
+      ],
+      "load_kw": 20,
+      "fuel_litres": 2.8,
+      "fuel_running_litres": 18.0
+    },
+    {
+      "slot": 7,
+      "hour": "17:00",
+      "powered": [
+        "s0",
+        "s5",
+        "s7",
+        "s8",
+        "s10"
+      ],
+      "dark": [
+        {
+          "id": "s1",
+          "reason": "Capacity: 20 kW on + 5 kW = 25 kW > 20 kW limit; 5 kW would have to go. Worth 2 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s2",
+          "reason": "Capacity: 20 kW on + 4 kW = 24 kW > 20 kW limit; 4 kW would have to go. Worth 5 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s3",
+          "reason": "Capacity: 20 kW on + 3 kW = 23 kW > 20 kW limit; 3 kW would have to go. Worth 0 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s4",
+          "reason": "Capacity: 20 kW on + 1 kW = 21 kW > 20 kW limit; 1 kW would have to go. Worth 7 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s6",
+          "reason": "Capacity: 20 kW on + 1 kW = 21 kW > 20 kW limit; 1 kW would have to go. Worth 0 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s9",
+          "reason": "Capacity: 20 kW on + 3 kW = 23 kW > 20 kW limit; 3 kW would have to go. Worth 2 here. No swap that frees the room scores higher for the day without breaking a rule."
+        },
+        {
+          "id": "s11",
+          "reason": "Capacity: 20 kW on + 1 kW = 21 kW > 20 kW limit; 1 kW would have to go. Worth 8 here. No swap that frees the room scores higher for the day without breaking a rule."
+        }
+      ],
+      "load_kw": 20,
+      "fuel_litres": 2.8,
+      "fuel_running_litres": 20.8
+    },
+    {
+      "slot": 8,
+      "hour": "18:00",
+      "powered": [
+        "s0",
+        "s2",
+        "s3",
+        "s6",
+        "s11"
+      ],
+      "dark": [
+        {
+          "id": "s1",
+          "reason": "Fuel: adding 5 kW lifts this hour 14->19 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 4 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s4",
+          "reason": "Fuel: adding 1 kW lifts this hour 14->15 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s5",
+          "reason": "Fuel: adding 6 kW lifts this hour 14->20 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 0 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s7",
+          "reason": "Fuel: adding 5 kW lifts this hour 14->19 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s8",
+          "reason": "Fuel: adding 2 kW lifts this hour 14->16 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 7 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s9",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s10",
+          "reason": "Fuel: adding 2 kW lifts this hour 14->16 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 1 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 14,
+      "fuel_litres": 2.0,
+      "fuel_running_litres": 22.8
+    },
+    {
+      "slot": 9,
+      "hour": "19:00",
+      "powered": [
+        "s0",
+        "s1",
+        "s4",
+        "s9"
+      ],
+      "dark": [
+        {
+          "id": "s2",
+          "reason": "Fuel: adding 4 kW lifts this hour 14->18 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s3",
+          "reason": "Fuel: adding 3 kW lifts this hour 14->17 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s5",
+          "reason": "Fuel: adding 6 kW lifts this hour 14->20 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 4 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s6",
+          "reason": "Fuel: adding 1 kW lifts this hour 14->15 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 0 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s7",
+          "reason": "Fuel: adding 5 kW lifts this hour 14->19 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 1 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s8",
+          "reason": "Fuel: adding 2 kW lifts this hour 14->16 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 0 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s10",
+          "reason": "Fuel: adding 2 kW lifts this hour 14->16 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 0 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "s11",
+          "reason": "Fuel: adding 1 kW lifts this hour 14->15 kW (2.00 L->2.80 L, +0.80 L); the day would need 25.60 L > 25.50 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 14,
+      "fuel_litres": 2.0,
+      "fuel_running_litres": 24.8
+    }
+  ],
+  "value_total": 312,
+  "fuel_total_litres": 24.8,
+  "dark_hours": {
+    "s0": 0,
+    "s1": 6,
+    "s2": 7,
+    "s3": 6,
+    "s4": 3,
+    "s5": 7,
+    "s6": 3,
+    "s7": 7,
+    "s8": 6,
+    "s9": 6,
+    "s10": 5,
+    "s11": 5
+  }
+}

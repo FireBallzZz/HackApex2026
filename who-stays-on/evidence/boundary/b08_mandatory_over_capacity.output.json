@@ -1,0 +1,7 @@
+{
+  "status": "infeasible",
+  "message": "Capacity vs mandatory (rules 3, 5): pharmacy 11 kW = 11 kW > 10 kW generator, in every outage hour (12:00, 13:00, 14:00, 17:00, 18:00, 19:00).",
+  "conflicts": [
+    "Capacity vs mandatory (rules 3, 5): pharmacy 11 kW = 11 kW > 10 kW generator, in every outage hour (12:00, 13:00, 14:00, 17:00, 18:00, 19:00)."
+  ]
+}

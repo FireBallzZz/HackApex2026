@@ -1,0 +1,169 @@
+{
+  "status": "ok",
+  "roster": [
+    {
+      "slot": 2,
+      "hour": "12:00",
+      "powered": [],
+      "dark": [
+        {
+          "id": "tailor",
+          "reason": "Fuel: adding 4 kW lifts this hour 0->4 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "mobile",
+          "reason": "Fuel: adding 3 kW lifts this hour 0->3 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "photocopy",
+          "reason": "Fuel: adding 2 kW lifts this hour 0->2 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "tea_stall",
+          "reason": "Fuel: adding 1 kW lifts this hour 0->1 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    },
+    {
+      "slot": 3,
+      "hour": "13:00",
+      "powered": [],
+      "dark": [
+        {
+          "id": "tailor",
+          "reason": "Fuel: adding 4 kW lifts this hour 0->4 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "mobile",
+          "reason": "Fuel: adding 3 kW lifts this hour 0->3 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "photocopy",
+          "reason": "Fuel: adding 2 kW lifts this hour 0->2 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "tea_stall",
+          "reason": "Fuel: adding 1 kW lifts this hour 0->1 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    },
+    {
+      "slot": 4,
+      "hour": "14:00",
+      "powered": [],
+      "dark": [
+        {
+          "id": "tailor",
+          "reason": "Fuel: adding 4 kW lifts this hour 0->4 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 4 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "mobile",
+          "reason": "Fuel: adding 3 kW lifts this hour 0->3 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "photocopy",
+          "reason": "Fuel: adding 2 kW lifts this hour 0->2 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 4 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "tea_stall",
+          "reason": "Fuel: adding 1 kW lifts this hour 0->1 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    },
+    {
+      "slot": 7,
+      "hour": "17:00",
+      "powered": [],
+      "dark": [
+        {
+          "id": "tailor",
+          "reason": "Fuel: adding 4 kW lifts this hour 0->4 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 4 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "mobile",
+          "reason": "Fuel: adding 3 kW lifts this hour 0->3 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 6 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "photocopy",
+          "reason": "Fuel: adding 2 kW lifts this hour 0->2 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 2 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "tea_stall",
+          "reason": "Fuel: adding 1 kW lifts this hour 0->1 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    },
+    {
+      "slot": 8,
+      "hour": "18:00",
+      "powered": [],
+      "dark": [
+        {
+          "id": "tailor",
+          "reason": "Fuel: adding 4 kW lifts this hour 0->4 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "mobile",
+          "reason": "Fuel: adding 3 kW lifts this hour 0->3 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 8 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "photocopy",
+          "reason": "Fuel: adding 2 kW lifts this hour 0->2 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 1 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "tea_stall",
+          "reason": "Fuel: adding 1 kW lifts this hour 0->1 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    },
+    {
+      "slot": 9,
+      "hour": "19:00",
+      "powered": [],
+      "dark": [
+        {
+          "id": "tailor",
+          "reason": "Fuel: adding 4 kW lifts this hour 0->4 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 5 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "mobile",
+          "reason": "Fuel: adding 3 kW lifts this hour 0->3 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 8 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "photocopy",
+          "reason": "Fuel: adding 2 kW lifts this hour 0->2 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 1 here, the diesel buys more value in other hours."
+        },
+        {
+          "id": "tea_stall",
+          "reason": "Fuel: adding 1 kW lifts this hour 0->1 kW (0.00 L->0.80 L, +0.80 L); the day would need 0.80 L > 0.00 L budget. Worth only 3 here, the diesel buys more value in other hours."
+        }
+      ],
+      "load_kw": 0,
+      "fuel_litres": 0.0,
+      "fuel_running_litres": 0.0
+    }
+  ],
+  "value_total": 0,
+  "fuel_total_litres": 0.0,
+  "dark_hours": {
+    "tailor": 6,
+    "mobile": 6,
+    "photocopy": 6,
+    "tea_stall": 6
+  }
+}
